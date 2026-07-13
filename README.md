@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Petula Trávníčková — portfolio
 
-## Getting Started
+Osobní portfolio fotografky. Next.js + Tailwind + Sanity CMS, hostované na Vercelu
+(`petulatravnickova.vercel.app`). Detailní plán v [PLAN.md](PLAN.md).
 
-First, run the development server:
+## Vývoj
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev   # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Bez nastaveného Sanity běží web na **demo datech** (fotky z picsum.photos) —
+všechno se dá vyvíjet a prohlížet i bez CMS.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Napojení Sanity (jednorázově)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Vytvoř projekt na [sanity.io/manage](https://www.sanity.io/manage) (free plán).
+2. Zkopíruj `.env.local.example` → `.env.local` a doplň `NEXT_PUBLIC_SANITY_PROJECT_ID`.
+3. V nastavení Sanity projektu (API → CORS origins) povol `http://localhost:3000`
+   a `https://petulatravnickova.vercel.app` (s credentials).
+4. Studio běží na `/studio` — přihlásí se tam Petula a nahrává obsah:
+   Nastavení webu, Stránka O mně, 4 Kategorie, Série fotek.
 
-## Learn More
+## Deploy na Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Pushni repo na GitHub, na Vercelu „Import Project“, pojmenuj projekt
+   `petulatravnickova` (tím vznikne doména petulatravnickova.vercel.app).
+2. Nastav env proměnné z `.env.local.example`.
+3. Webhook pro okamžité propsání změn z CMS: v Sanity (API → Webhooks)
+   vytvoř POST webhook na `https://petulatravnickova.vercel.app/api/revalidate`,
+   secret = hodnota `SANITY_REVALIDATE_SECRET`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Pro Petulu — nahrávání fotek
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Fotky nahrávej jako JPEG, delší strana ~4000 px, sRGB.
+- Každá fotka musí mít vyplněný „Popis fotky“.
+- Fotky na úvodní stránku: zapni u fotky „Zobrazit na úvodní stránce“ (~12 nejlepších).
