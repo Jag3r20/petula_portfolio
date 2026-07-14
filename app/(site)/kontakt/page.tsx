@@ -6,49 +6,88 @@ export const metadata: Metadata = {
   description: "Kontakt na fotografku Petulu Trávníčkovou.",
 };
 
+/** Velký kontaktní odkaz s animovaným podtržením. */
+function ContactLink({ href, children }: { href: string; children: string }) {
+  return (
+    <a
+      href={href}
+      className="group relative inline-block break-all font-display text-2xl tracking-tight sm:text-5xl"
+    >
+      {children}
+      <span
+        aria-hidden
+        className="absolute -bottom-1.5 left-0 h-px w-full bg-line sm:-bottom-2.5"
+      />
+      <span
+        aria-hidden
+        className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-foreground transition-transform duration-500 ease-out group-hover:scale-x-100 sm:-bottom-2.5"
+      />
+    </a>
+  );
+}
+
 export default async function ContactPage() {
   const settings = await getSettings();
+  const socials = [
+    settings.instagram && { label: "Instagram", href: settings.instagram },
+    settings.linkedin && { label: "LinkedIn", href: settings.linkedin },
+  ].filter((s): s is { label: string; href: string } => Boolean(s));
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-      <h1 className="font-display text-3xl sm:text-4xl">Kontakt</h1>
-      <div className="mt-12 space-y-6">
-        <a
-          href={`mailto:${settings.email}`}
-          className="block font-display text-2xl underline decoration-line underline-offset-8 transition-colors hover:decoration-foreground sm:text-4xl"
-        >
-          {settings.email}
-        </a>
+    <div className="mx-auto flex min-h-[calc(100svh-3.75rem)] w-full max-w-6xl flex-col justify-center px-4 py-16 sm:px-6">
+      <p className="rise text-[11px] uppercase tracking-[0.3em] text-muted sm:text-xs">
+        Kontakt
+      </p>
+      <h1
+        className="rise mt-4 font-display text-4xl leading-[1.05] tracking-tight sm:text-6xl"
+        style={{ animationDelay: "100ms" }}
+      >
+        Pojďme spolu
+        <br />
+        <span className="italic">něco nafotit.</span>
+      </h1>
+
+      <div className="mt-14 space-y-10 sm:mt-20 sm:space-y-12">
+        <div className="rise" style={{ animationDelay: "250ms" }}>
+          <p className="mb-3 text-[11px] uppercase tracking-[0.3em] text-muted">
+            E-mail
+          </p>
+          <ContactLink href={`mailto:${settings.email}`}>
+            {settings.email}
+          </ContactLink>
+        </div>
+
         {settings.phone && (
-          <a
-            href={`tel:${settings.phone.replace(/\s/g, "")}`}
-            className="block font-display text-2xl underline decoration-line underline-offset-8 transition-colors hover:decoration-foreground sm:text-4xl"
-          >
-            {settings.phone}
-          </a>
+          <div className="rise" style={{ animationDelay: "350ms" }}>
+            <p className="mb-3 text-[11px] uppercase tracking-[0.3em] text-muted">
+              Telefon
+            </p>
+            <ContactLink href={`tel:${settings.phone.replace(/\s/g, "")}`}>
+              {settings.phone}
+            </ContactLink>
+          </div>
         )}
       </div>
-      <div className="mt-16 flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted">
+
+      <div
+        className="rise mt-16 flex flex-wrap items-baseline gap-x-10 gap-y-3 border-t border-line pt-6 text-sm text-muted sm:mt-24"
+        style={{ animationDelay: "450ms" }}
+      >
         {settings.city && <span>{settings.city}</span>}
-        {settings.instagram && (
+        {socials.map((social) => (
           <a
-            href={settings.instagram}
+            key={social.label}
+            href={social.href}
             target="_blank"
             rel="noreferrer"
-            className="hover:text-foreground"
+            className="group transition-colors hover:text-foreground"
           >
-            Instagram
+            {social.label}
+            <span className="ml-1 inline-block transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+              ↗
+            </span>
           </a>
-        )}
-        {settings.linkedin && (
-          <a
-            href={settings.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-foreground"
-          >
-            LinkedIn
-          </a>
-        )}
+        ))}
       </div>
     </div>
   );

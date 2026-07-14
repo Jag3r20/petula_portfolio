@@ -31,3 +31,74 @@ body {
   background: var(--foreground);
   color: var(--background);
 }
+
+/* --- Hero animace (components/Hero.tsx) --- */
+
+/* Pomalý Ken Burns zoom — běží trvale, ať crossfade nikdy neskáče. */
+.hero-kenburns {
+  animation: hero-zoom 16s ease-in-out infinite alternate;
+}
+
+@keyframes hero-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+/* Postupné vyjetí textu při načtení (stagger přes animation-delay).
+   Používá hero i kontakt. */
+.rise {
+  opacity: 0;
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Scroll indikátor — tenká linka, po které stéká světlý proužek. */
+.hero-scroll-line {
+  position: relative;
+  width: 1px;
+  height: 3rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.hero-scroll-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  animation: hero-scroll 2.4s ease-in-out infinite;
+}
+
+@keyframes hero-scroll {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns,
+  .hero-scroll-line::after {
+    animation: none;
+  }
+  .rise {
+    animation: none;
+    opacity: 1;
+  }
+}

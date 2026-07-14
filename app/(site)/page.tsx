@@ -1,9 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { CategoryCard } from "@/components/CategoryCard";
 import { Gallery } from "@/components/Gallery";
+import { Hero } from "@/components/Hero";
 import { getCategories, getFeaturedPhotos, getSettings } from "@/lib/data";
-import { photoSrc } from "@/lib/image";
 
 export default async function HomePage() {
   const [settings, featured, categories] = await Promise.all([
@@ -12,32 +11,18 @@ export default async function HomePage() {
     getCategories(),
   ]);
 
+  // Slideshow v hero: hero fotka + pár vybraných na šířku (portréty se
+  // na fullscreen nehodí), bez duplicit.
+  const heroPhotos = [
+    settings.heroPhoto,
+    ...featured.filter((p) => p.width >= p.height).slice(0, 3),
+  ].filter(
+    (photo, i, all) => all.findIndex((p) => p.url === photo.url) === i,
+  );
+
   return (
     <>
-      {/* Hero */}
-      <section className="relative h-[calc(100svh-3.75rem)] min-h-[420px]">
-        <Image
-          src={photoSrc(settings.heroPhoto, 2400)}
-          alt={settings.heroPhoto.alt}
-          fill
-          priority
-          sizes="100vw"
-          placeholder={settings.heroPhoto.lqip ? "blur" : "empty"}
-          blurDataURL={settings.heroPhoto.lqip}
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black/25" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
-          <h1 className="font-display text-4xl tracking-tight sm:text-6xl">
-            Petula Trávníčková
-          </h1>
-          {settings.tagline && (
-            <p className="mt-3 text-sm text-white/85 sm:text-base">
-              {settings.tagline}
-            </p>
-          )}
-        </div>
-      </section>
+      <Hero photos={heroPhotos} tagline={settings.tagline} />
 
       {/* Intro */}
       {settings.intro && (
