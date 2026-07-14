@@ -35,20 +35,12 @@ export default async function ContactPage() {
 
   return (
     <div className="mx-auto flex min-h-[calc(100svh-3.75rem)] w-full max-w-6xl flex-col justify-center px-4 py-16 sm:px-6">
-      <p className="rise text-[11px] uppercase tracking-[0.3em] text-muted sm:text-xs">
+      <h1 className="rise font-display text-3xl tracking-tight sm:text-4xl">
         Kontakt
-      </p>
-      <h1
-        className="rise mt-4 font-display text-4xl leading-[1.05] tracking-tight sm:text-6xl"
-        style={{ animationDelay: "100ms" }}
-      >
-        Pojďme spolu
-        <br />
-        <span className="italic">něco nafotit.</span>
       </h1>
 
       <div className="mt-14 space-y-10 sm:mt-20 sm:space-y-12">
-        <div className="rise" style={{ animationDelay: "250ms" }}>
+        <div className="rise" style={{ animationDelay: "150ms" }}>
           <p className="mb-3 text-[11px] uppercase tracking-[0.3em] text-muted">
             E-mail
           </p>
@@ -58,7 +50,7 @@ export default async function ContactPage() {
         </div>
 
         {settings.phone && (
-          <div className="rise" style={{ animationDelay: "350ms" }}>
+          <div className="rise" style={{ animationDelay: "250ms" }}>
             <p className="mb-3 text-[11px] uppercase tracking-[0.3em] text-muted">
               Telefon
             </p>
@@ -71,7 +63,7 @@ export default async function ContactPage() {
 
       <div
         className="rise mt-16 flex flex-wrap items-baseline gap-x-10 gap-y-3 border-t border-line pt-6 text-sm text-muted sm:mt-24"
-        style={{ animationDelay: "450ms" }}
+        style={{ animationDelay: "350ms" }}
       >
         {settings.city && <span>{settings.city}</span>}
         {socials.map((social) => (

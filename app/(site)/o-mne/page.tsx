@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { PortableText, type PortableTextBlock } from "next-sanity";
-import { getAbout } from "@/lib/data";
+import { getAbout, getSettings } from "@/lib/data";
 import { photoSrc } from "@/lib/image";
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const about = await getAbout();
+  const [about, settings] = await Promise.all([getAbout(), getSettings()]);
   const bioIsPlainText = about.bio.every((b) => typeof b === "string");
 
   return (
@@ -67,6 +67,30 @@ export default async function AboutPage() {
               <p className="text-sm text-muted">{about.gear.join(" · ")}</p>
             </section>
           )}
+
+          <section className="mt-10">
+            <h2 className="mb-3 font-display text-xl">Kontakt</h2>
+            <ul className="space-y-1 text-sm">
+              <li>
+                <a
+                  href={`mailto:${settings.email}`}
+                  className="underline decoration-line underline-offset-4 transition-colors hover:decoration-foreground"
+                >
+                  {settings.email}
+                </a>
+              </li>
+              {settings.phone && (
+                <li>
+                  <a
+                    href={`tel:${settings.phone.replace(/\s/g, "")}`}
+                    className="underline decoration-line underline-offset-4 transition-colors hover:decoration-foreground"
+                  >
+                    {settings.phone}
+                  </a>
+                </li>
+              )}
+            </ul>
+          </section>
 
           {about.cvUrl && (
             <a
